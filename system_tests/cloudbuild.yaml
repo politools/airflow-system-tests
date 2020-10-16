@@ -1,0 +1,44 @@
+steps:
+  - name: 'gcr.io/cloud-builders/git'
+    dir: 'system_tests'
+    args: ['clone', '${_AIRFLOW_REPO}']
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    dir: 'system_tests/airflow'
+    args:
+      - '-c'
+      - |
+          git checkout ${_BANCH}
+          mkdir -p files/airflow-breeze-config
+          git clone https://source.developers.google.com/p/polidea-airflow/r/airflow-breeze-config files/airflow-breeze-config/
+  - name: 'gcr.io/cloud-builders/gcloud'
+    dir: 'system_tests/airflow'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+          ./files/airflow-breeze-config/decrypt_all.sh
+          cat <<EOT >> files/airflow-breeze-config/init.sh
+          rm /usr/bin/gcloud || true
+          rm /opt/airflow/scripts/in_container/run_cli_tool.sh || true
+          bash <(curl https://sdk.cloud.google.com/) --disable-prompts
+          export PATH="/root/google-cloud-sdk/bin/:\$$PATH"
+          EOT
+          cat files/airflow-breeze-config/init.sh
+  - name: 'gcr.io/$PROJECT_ID/system-tests-builder'
+    dir: 'system_tests/airflow'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+          ${_CMD}
+    env:
+      - 'TERM=xterm'
+      - 'SKIP_IN_CONTAINER_CHECK=true'
+      - 'FORCE_ANSWER_TO_QUESTIONS=yes'
+      - 'GITHUB_ACTIONS=false'
+
+substitutions:
+  _AIRFLOW_REPO: 'https://github.com/apache/airflow'
+  _BRANCH: 'master'
+  _CMD: './breeze tests --verbose --backend=postgres tests/providers/google/cloud/operators/test_natural_language_system.py -- -s --system=google'
