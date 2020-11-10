@@ -1,3 +1,4 @@
+---
 steps:
   - name: 'gcr.io/cloud-builders/git'
     dir: 'system_tests'
@@ -10,7 +11,8 @@ steps:
       - |
           git checkout ${_BANCH}
           mkdir -p files/airflow-breeze-config
-          git clone https://source.developers.google.com/p/polidea-airflow/r/airflow-breeze-config files/airflow-breeze-config/
+          git clone https://source.developers.google.com/p/polidea-airflow/r/airflow-breeze-config \
+          files/airflow-breeze-config/
   - name: 'gcr.io/cloud-builders/gcloud'
     dir: 'system_tests/airflow'
     entrypoint: 'bash'
@@ -41,4 +43,6 @@ steps:
 substitutions:
   _AIRFLOW_REPO: 'https://github.com/apache/airflow'
   _BRANCH: 'master'
-  _CMD: './breeze tests --verbose --backend=postgres tests/providers/google/cloud/operators/test_natural_language_system.py -- -s --system=google'
+  _CMD: |
+    ./breeze tests --verbose --backend=postgres \
+    tests/providers/google/cloud/operators/test_natural_language_system.py -- -s --system=google

@@ -1,17 +1,18 @@
+---
 substitutions:
   _DOCKER_COMPOSE_VERSION: 1.27.4
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-  - 'build'
-  - '--build-arg'
-  - 'DOCKER_COMPOSE_VERSION=${_DOCKER_COMPOSE_VERSION}'
-  - '-t'
-  - 'gcr.io/$PROJECT_ID/system-tests-builder:latest'
-  - '.'
-- name: 'gcr.io/$PROJECT_ID/system-tests-builder'
-  args: ['echo', 'test']
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--build-arg'
+      - 'DOCKER_COMPOSE_VERSION=${_DOCKER_COMPOSE_VERSION}'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/system-tests-builder:latest'
+      - '.'
+  - name: 'gcr.io/$PROJECT_ID/system-tests-builder'
+    args: ['echo', 'test']
 
 images:
-- 'gcr.io/$PROJECT_ID/system-tests-builder:latest'
+  - 'gcr.io/$PROJECT_ID/system-tests-builder:latest'
 tags: ['system-tests']
