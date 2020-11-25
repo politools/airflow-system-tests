@@ -1,9 +1,11 @@
 ---
 steps:
-  - name: 'gcr.io/cloud-builders/git'
+  - id: 'Clone Apache Airflow repository'
+    name: 'gcr.io/cloud-builders/git'
     dir: 'system_tests'
     args: ['clone', '${_AIRFLOW_REPO}']
-  - name: 'gcr.io/cloud-builders/git'
+  - id: 'Clone Airflow Breeze Config repository'
+    name: 'gcr.io/cloud-builders/git'
     entrypoint: 'bash'
     dir: 'system_tests/airflow'
     args:
@@ -13,7 +15,8 @@ steps:
           mkdir -p files/airflow-breeze-config
           git clone https://source.developers.google.com/p/polidea-airflow/r/airflow-breeze-config \
           files/airflow-breeze-config/
-  - name: 'gcr.io/cloud-builders/gcloud'
+  - id: 'Customize init.sh'
+    name: 'gcr.io/cloud-builders/gcloud'
     dir: 'system_tests/airflow'
     entrypoint: 'bash'
     args:
@@ -27,21 +30,66 @@ steps:
           export PATH="/root/google-cloud-sdk/bin/:\$$PATH"
           EOT
           cat files/airflow-breeze-config/init.sh
-  - name: 'gcr.io/$PROJECT_ID/system-tests-builder'
+  - id: 'Run system tests'
+    name: 'gcr.io/$PROJECT_ID/system-tests-builder'
     dir: 'system_tests/airflow'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-          ${_CMD}
+          ${_CMD} || echo $? > exit_code
     env:
       - 'TERM=xterm'
       - 'SKIP_IN_CONTAINER_CHECK=true'
       - 'FORCE_ANSWER_TO_QUESTIONS=yes'
       - 'GITHUB_ACTIONS=false'
+  - id: 'CAT log files'
+    name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+          "### Display content of files in system_tests/airflow/logs/ directory ###"
+          for file in $(find system_tests/airflow/logs -name '*.log' -type f) ; do
+              echo " "
+              echo "Display content of files in system_tests/airflow/logs/ directory"
+              echo "############ START OF FILE #########"
+              echo ${file}
+              echo " "
+              cat ${file}
+              echo "############ END OF FILE ############"
+              echo " "
+          done
+  - id: 'Upload log files to GCS'
+    name: 'gcr.io/cloud-builders/gsutil'
+    dir: 'system_tests/airflow'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+          FILENAME=$BUILD_ID.zip
+          FILEPATH=$_LOGS_GCS_BUCKET/$PROJECT_ID/$$FILENAME
+          GCS_GS_FILE_PATH=gs://$$FILEPATH
+          GCS_HTTP_FILE_PATH=https://storage.cloud.google.com/$$FILEPATH
+          zip -r $$FILENAME logs
+          gsutil cp $BUILD_ID.zip $$GCS_GS_FILE_PATH
+          echo "Logs uploaded:"
+          echo " - $$GCS_GS_FILE_PATH"
+          echo " - $$GCS_HTTP_FILE_PATH"
+  - id: 'Raise exit status'
+    name: 'gcr.io/cloud-builders/gsutil'
+    dir: 'system_tests/airflow'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+          if [[ -f "exit_code" ]]; then
+              exit $(cat exit_code)
+          fi
 
 substitutions:
   _AIRFLOW_REPO: 'https://github.com/apache/airflow'
+  _LOGS_GCS_BUCKET: 'airflow-system-tests-logs'
   _BRANCH: 'master'
   _CMD: |
     ./breeze tests --verbose --backend=postgres \
