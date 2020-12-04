@@ -94,3 +94,6 @@ substitutions:
   _CMD: |
     ./breeze tests --verbose --backend=postgres \
     tests/providers/google/cloud/operators/test_natural_language_system.py -- -s --system=google
+  _TAG: 'trigger-manual'
+
+tags: ["system-test", "${_TAG}"]

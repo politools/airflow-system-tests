@@ -1,0 +1,11 @@
+---
+steps:
+  - id: 'Run multiple tests'
+    name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+          bash scripts/run_system_tests.sh scripts/list_of_tests.sh
+    env:
+      - 'BUILD_ID=$BUILD_ID'
