@@ -34,6 +34,12 @@ time gcloud builds submit . \
     --substitutions _CMD='./breeze tests --verbose --backend=postgres tests/providers/google/cloud/operators/test_cloud_memorystore_system.py -- -s --system=google',_AIRFLOW_REPO='https://github.com/PolideaInternal/airflow',_BRANCH='fix-to-issue-8286-cloud-memorystore-memcached-operators'
 ```
 
+Run multiple system tests listed in `scripts/list_of_tests.sh`:
+
+```shell
+gcloud builds submit --config=cloudbuild_system_tests.yaml
+```
+
 ### Cloud Builder
 
 ```shell
