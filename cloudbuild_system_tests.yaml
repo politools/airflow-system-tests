@@ -9,3 +9,5 @@ steps:
           bash scripts/run_system_tests.sh scripts/list_of_tests.sh
     env:
       - 'BUILD_ID=$BUILD_ID'
+
+tags: ["system-test", "trigger-build"]

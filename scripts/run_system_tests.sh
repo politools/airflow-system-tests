@@ -50,5 +50,7 @@ while read line; do
 done < ${LIST_FILE}
 
 echo
-echo "List runs with command"
+echo "List runs with command:"
+echo
 echo "gcloud builds list --filter \"tags='trigger-${BUILD_ID}'\" --format=\"table[box,margin=3,title='system tests'](id,status,tags,logUrl)\""
+echo
