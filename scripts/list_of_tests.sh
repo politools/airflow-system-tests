@@ -5,10 +5,10 @@
 tests/providers/google/cloud/operators/test_speech_to_text_system.py
 tests/providers/google/cloud/operators/test_natural_language_system.py
 #tests/providers/google/cloud/operators/test_kubernetes_engine_system.py
-#tests/providers/google/cloud/operators/test_automl_system.py
+tests/providers/google/cloud/operators/test_automl_system.py
 #tests/providers/google/cloud/operators/test_datafusion_system.py
 #tests/providers/google/cloud/operators/test_bigquery_system.py
-#tests/providers/google/cloud/operators/test_bigquery_dts_system.py
+tests/providers/google/cloud/operators/test_bigquery_dts_system.py
 #tests/providers/google/cloud/operators/test_functions_system.py
 #tests/providers/google/cloud/operators/test_translate_system.py
 #tests/providers/google/cloud/operators/test_cloud_sql_system.py
@@ -17,10 +17,10 @@ tests/providers/google/cloud/operators/test_natural_language_system.py
 #tests/providers/google/cloud/operators/test_vision_system.py
 #tests/providers/google/cloud/operators/test_mlengine_system.py
 #tests/providers/google/cloud/operators/test_dlp_system.py
-#tests/providers/google/cloud/operators/test_pubsub_system.py
-#tests/providers/google/cloud/operators/test_cloud_build_system.py
-#tests/providers/google/cloud/operators/test_translate_speech_system.py
-#tests/providers/google/cloud/operators/test_gcs_system.py
+tests/providers/google/cloud/operators/test_pubsub_system.py
+tests/providers/google/cloud/operators/test_cloud_build_system.py
+tests/providers/google/cloud/operators/test_translate_speech_system.py
+tests/providers/google/cloud/operators/test_gcs_system.py
 #tests/providers/google/cloud/operators/test_dataproc_system.py
 #tests/providers/google/cloud/operators/test_life_sciences_system.py
 #tests/providers/google/cloud/operators/test_cloud_memorystore_system.py
