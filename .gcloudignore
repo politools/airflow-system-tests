@@ -1,1 +1,12 @@
 #!include:.gitignore
+# Ignore everything
+*
+
+# Except files we want
+!scripts/
+!scripts/list_of_tests.sh
+!scripts/run_single_system_test.sh
+!scripts/run_system_tests.sh
+
+!system_tests/
+!system_tests/cloudbuild.yaml
