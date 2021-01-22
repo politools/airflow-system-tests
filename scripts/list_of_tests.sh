@@ -26,12 +26,12 @@ tests/providers/google/cloud/operators/test_gcs_system.py
 #tests/providers/google/cloud/operators/test_cloud_memorystore_system.py
 #tests/providers/google/cloud/operators/test_video_intelligence_system.py
 #tests/providers/google/cloud/operators/test_cloud_storage_transfer_service_system.py
-#tests/providers/google/cloud/operators/test_text_to_speech_system.py
+tests/providers/google/cloud/operators/test_text_to_speech_system.py
 #tests/providers/google/cloud/operators/test_bigtable_system.py
 #tests/providers/google/cloud/operators/test_dataprep_system.py
-#tests/providers/google/cloud/operators/test_spanner_system.py
+tests/providers/google/cloud/operators/test_spanner_system.py
 #tests/providers/google/cloud/operators/test_dataflow_system.py
-#tests/providers/google/cloud/operators/test_tasks_system.py
+tests/providers/google/cloud/operators/test_tasks_system.py
 
 ## tests/providers/google/cloud/secrets/
 #tests/providers/google/cloud/secrets/test_secret_manager_system.py
