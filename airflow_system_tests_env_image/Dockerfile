@@ -1,6 +1,11 @@
-FROM ubuntu:bionic
-
+# Image to runa Apache Airflow Breeze environment
+# Airflow Breeze prerequisites:
+# https://github.com/apache/airflow/blob/master/BREEZE.rst#prerequisites
+#
+# based on:
 # https://github.com/GoogleCloudPlatform/cloud-builders-community/blob/master/docker-compose/Dockerfile
+
+FROM ubuntu:bionic
 
 ARG DOCKER_COMPOSE_VERSION
 

@@ -13,7 +13,7 @@ steps:
       - |
           git checkout ${_BRANCH}
           mkdir -p files/airflow-breeze-config
-          git clone https://source.developers.google.com/p/polidea-airflow/r/airflow-breeze-config \
+          git clone https://source.developers.google.com/p/"${PROJECT_ID}"/r/airflow-breeze-config \
           files/airflow-breeze-config/
   - id: 'Customize Airflow Breeze Config init.sh'
     name: 'gcr.io/cloud-builders/gcloud'
@@ -31,7 +31,7 @@ steps:
           EOT
           cat files/airflow-breeze-config/init.sh
   - id: 'Run system tests'
-    name: 'gcr.io/$PROJECT_ID/system-tests-builder'
+    name: 'gcr.io/$PROJECT_ID/airflow-system-tests-env'
     dir: 'system_tests/airflow'
     entrypoint: 'bash'
     args:
@@ -94,7 +94,7 @@ substitutions:
   _CMD: |
     ./breeze tests --verbose --backend=postgres \
     tests/providers/google/cloud/operators/test_natural_language_system.py -- -s --system=google
-  _TAG: 'trigger-manual'
+  _TAG_TRIGGER_TYPE: 'trigger-manual'
   _TAG_TEST_NAME: 'test-name-not-specified'
 
-tags: ["system-test", "${_TAG}", "${_TAG_TEST_NAME}"]
+tags: ["system-test", "${_TAG_TRIGGER_TYPE}", "${_TAG_TEST_NAME}"]

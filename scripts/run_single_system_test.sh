@@ -9,7 +9,7 @@ cd "${GCB_DIR}" || exit 1
 
 FILE_PATH=$1
 BUILD_ID=${2:-"manual"}
-TAG="trigger-${BUILD_ID}"
+TAG_TRIGGER_TYPE="trigger-${BUILD_ID}"
 
 if test -z "$FILE_PATH"
 then
@@ -29,10 +29,11 @@ echo "    ${FILE_PATH}"
 echo "  cmd:"
 echo "    ${CMD}"
 echo "  tags:"
-echo "    ${TAG}"
+echo "    ${TAG_TRIGGER_TYPE}"
 echo "    ${FILE_WITHOUT_PY}"
+echo
 
 gcloud builds submit . \
     --timeout=3600 \
-    --substitutions _CMD="${CMD}",_TAG="${TAG}",_TAG_TEST_NAME="${FILE_WITHOUT_PY}" \
+    --substitutions _CMD="${CMD}",_TAG_TRIGGER_TYPE="${TAG_TRIGGER_TYPE}",_TAG_TEST_NAME="${FILE_WITHOUT_PY}" \
     --async
