@@ -32,23 +32,22 @@ steps:
           mkdir -p files/airflow-breeze-config
           git clone https://source.developers.google.com/p/"${PROJECT_ID}"/r/airflow-breeze-config \
           files/airflow-breeze-config/
-  - id: 'Customize Airflow Breeze Config init.sh'
+  - id: 'Configure Airflow Breeze Config'
     name: 'gcr.io/cloud-builders/gcloud'
     dir: 'system_tests/airflow'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-          # decrypt service account keys
-          ./files/airflow-breeze-config/decrypt_all.sh
-          # add Google Cloud SDK installation to init.sh
-          cat <<EOT >> files/airflow-breeze-config/init.sh
-          rm /usr/bin/gcloud || true
-          rm /opt/airflow/scripts/in_container/run_cli_tool.sh || true
-          bash <(curl https://sdk.cloud.google.com/) --disable-prompts
-          export PATH="/root/google-cloud-sdk/bin/:\$$PATH"
-          EOT
-          cat files/airflow-breeze-config/init.sh
+          export FILE="./files/airflow-breeze-config/configure_gcb.sh"
+          if [[ -f "$$FILE" ]]; then
+            echo "$$FILE exists and will be executed."
+            chmod +x ./files/airflow-breeze-config/configure_gcb.sh
+            ./files/airflow-breeze-config/configure_gcb.sh
+          else
+            echo "$$FILE does not exist."
+          fi
+
   - id: 'Run system tests'
     name: 'gcr.io/$PROJECT_ID/airflow-system-tests-env'
     dir: 'system_tests/airflow'

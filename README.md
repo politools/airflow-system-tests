@@ -22,6 +22,7 @@
 **Table of Contents**
 
 - [Airflow System Tests](#airflow-system-tests)
+  - [Airflow Breeze Config](#airflow-breeze-config)
   - [Run Breeze in Google Cloud Build](#run-breeze-in-google-cloud-build)
   - [Run system tests on `apache/airflow` `master` branch](#run-system-tests-on-apacheairflow-master-branch)
   - [Docker image to run Breeze](#docker-image-to-run-breeze)
@@ -33,13 +34,21 @@
 Files that allows to run [Apache Airflow](https://github.com/apache/) system tests.
 They are executed in **Google Cloud Build** by [Airflow Breeze](https://github.com/apache/airflow/blob/master/BREEZE.rst).
 
+## Airflow Breeze Config
+
 **WARNING**
 
 Running tests is dependent on `airflow-breeze-config` project repository.
+
+It should be available at `https://source.developers.google.com/p/"${PROJECT_ID}"/r/airflow-breeze-config` address.
+
+If script `configure_gcb.sh` exists in the `airflow-breeze-config` repository will be executed.
+It may be used to customize `init.sh` and install additional tools (e.g. `gcloud` command line tool).
+
 This repository contains:
 
- - customized `init.sh` which sets all necessary environment
- - encrypted service accounts credentials which are decrypted by executing `decrypt_all.sh` script.
+ - customized `init.sh` which sets all necessary environment variables
+ - encrypted service accounts credentials which may be decrypted by executing `decrypt_all.sh` script.
    (see: [`github.com/apache/tests/providers/google/cloud/utils/gcp_authenticator.py`](https://github.com/apache/airflow/blob/6d6588fe2b8bb5fa33e930646d963df3e0530f23/tests/providers/google/cloud/utils/gcp_authenticator.py))
 
 ## Run Breeze in Google Cloud Build
