@@ -23,7 +23,7 @@ module "service_account" {
   project_id  = var.project
   bucket_name = var.service_account_bucket_name
 
-  name = "gcp-cloud-build-account"
+  name = "gcp-cloud-build"
   project_roles = [
     "${var.project}=>roles/cloudbuild.builds.editor",
     "${var.project}=>roles/source.admin",

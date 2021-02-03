@@ -34,7 +34,7 @@ module "service_account" {
 }
 
 resource "google_storage_bucket_object" "service_account_key" {
-  name    = "service-accounts/${var.name}.json"
+  name    = "service-accounts/${replace(var.name, "-", "_")}.json"
   content = module.service_account.key
   bucket  = var.bucket_name
 }

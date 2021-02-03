@@ -23,7 +23,7 @@ module "service_account" {
   project_id  = var.project
   bucket_name = var.service_account_bucket_name
 
-  name = "gcp-task-account"
+  name = "gcp-task"
   project_roles = [
     "${var.project}=>roles/appengine.appViewer",
     "${var.project}=>roles/cloudtasks.admin",

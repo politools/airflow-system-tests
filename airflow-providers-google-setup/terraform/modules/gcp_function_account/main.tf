@@ -23,7 +23,7 @@ module "service_account" {
   project_id  = var.project
   bucket_name = var.service_account_bucket_name
 
-  name = "gcp-function-account"
+  name = "gcp-function"
   project_roles = [
     "${var.project}=>roles/cloudfunctions.developer",
     "${var.project}=>roles/source.reader",

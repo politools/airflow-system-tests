@@ -23,7 +23,7 @@ module "service_account" {
   project_id  = var.project
   bucket_name = var.service_account_bucket_name
 
-  name = "gcp-bigquery-account"
+  name = "gcp-bigquery"
   project_roles = [
     "${var.project}=>roles/bigquery.admin",
     "${var.project}=>roles/bigquerydatatransfer.serviceAgent",
