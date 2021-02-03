@@ -22,7 +22,7 @@ variable "project" {
   type        = string
 }
 
-variable "service_account_bucket_name" {
+variable "bucket_name" {
   description = "The name of bucket where the service account will be saved."
   type        = string
 }
