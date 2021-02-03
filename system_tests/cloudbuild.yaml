@@ -21,7 +21,7 @@ steps:
     name: 'gcr.io/cloud-builders/git'
     dir: 'system_tests'
     args: ['clone', '${_AIRFLOW_REPO}']
-  - id: 'Clone Airflow Breeze Config repository'
+  - id: 'Checkout Apache Airflow branch'
     name: 'gcr.io/cloud-builders/git'
     entrypoint: 'bash'
     dir: 'system_tests/airflow'
@@ -29,25 +29,23 @@ steps:
       - '-c'
       - |
           git checkout ${_BRANCH}
-          mkdir -p files/airflow-breeze-config
-          git clone https://source.developers.google.com/p/"${PROJECT_ID}"/r/airflow-breeze-config \
-          files/airflow-breeze-config/
   - id: 'Configure Airflow Breeze Config'
     name: 'gcr.io/cloud-builders/gcloud'
-    dir: 'system_tests/airflow'
+#    dir: 'system_tests/airflow'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-          export FILE="./files/airflow-breeze-config/configure_gcb.sh"
-          if [[ -f "$$FILE" ]]; then
-            echo "$$FILE exists and will be executed."
-            chmod +x ./files/airflow-breeze-config/configure_gcb.sh
-            ./files/airflow-breeze-config/configure_gcb.sh
-          else
-            echo "$$FILE does not exist."
-          fi
+          mkdir -p system_tests/airflow/files/airflow-breeze-config/keys
+          mv init.sh system_tests/airflow/files/airflow-breeze-config
+          mv set_variables.sh system_tests/airflow/files/airflow-breeze-config
+          mv decrypt_all_variables.sh system_tests/airflow/files/airflow-breeze-config
 
+          chmod +x system_tests/airflow/files/airflow-breeze-config/decrypt_all_variables.sh
+          bash system_tests/airflow/files/airflow-breeze-config/decrypt_all_variables.sh
+
+          gsutil -m cp -r gs://${_SERVICE_ACCOUNTS_GCS_BUCKET}/service-accounts/ .
+          mv service-accounts/* system_tests/airflow/files/airflow-breeze-config/keys
   - id: 'Run system tests'
     name: 'gcr.io/$PROJECT_ID/airflow-system-tests-env'
     dir: 'system_tests/airflow'
@@ -108,6 +106,7 @@ steps:
 substitutions:
   _AIRFLOW_REPO: 'https://github.com/apache/airflow'
   _BRANCH: 'master'
+  _SERVICE_ACCOUNTS_GCS_BUCKET: 'airflow-systest-project-system-tests-rlugtuhw'
   _LOGS_GCS_BUCKET: 'airflow-system-tests-logs'
   _CMD: |
     ./breeze tests --verbose --backend=postgres \

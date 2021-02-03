@@ -10,3 +10,6 @@
 
 !system_tests/
 !system_tests/cloudbuild.yaml
+!system_tests/init.sh
+!system_tests/decrypt_all_variables.sh
+!system_tests/set_variables.sh

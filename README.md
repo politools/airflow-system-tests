@@ -22,7 +22,7 @@
 **Table of Contents**
 
 - [Airflow System Tests](#airflow-system-tests)
-  - [Airflow Breeze Config](#airflow-breeze-config)
+  - [Preparing Google Cloud Project](#preparing-google-cloud-project)
   - [Run Breeze in Google Cloud Build](#run-breeze-in-google-cloud-build)
   - [Run system tests on `apache/airflow` `master` branch](#run-system-tests-on-apacheairflow-master-branch)
   - [Docker image to run Breeze](#docker-image-to-run-breeze)
@@ -34,22 +34,12 @@
 Files that allows to run [Apache Airflow](https://github.com/apache/) system tests.
 They are executed in **Google Cloud Build** by [Airflow Breeze](https://github.com/apache/airflow/blob/master/BREEZE.rst).
 
-## Airflow Breeze Config
+## Preparing Google Cloud Project
 
-**WARNING**
+Instruction how create Google Cloud Project for system tests is available in `airflow-providers-google-setup` folder.
+See instructions: [airflow-providers-google-setup/README.md](airflow-providers-google-setup/README.md)
 
-Running tests is dependent on `airflow-breeze-config` project repository.
-
-It should be available at `https://source.developers.google.com/p/"${PROJECT_ID}"/r/airflow-breeze-config` address.
-
-If script `configure_gcb.sh` exists in the `airflow-breeze-config` repository will be executed.
-It may be used to customize `init.sh` and install additional tools (e.g. `gcloud` command line tool).
-
-This repository contains:
-
- - customized `init.sh` which sets all necessary environment variables
- - encrypted service accounts credentials which may be decrypted by executing `decrypt_all.sh` script.
-   (see: [`github.com/apache/tests/providers/google/cloud/utils/gcp_authenticator.py`](https://github.com/apache/airflow/blob/6d6588fe2b8bb5fa33e930646d963df3e0530f23/tests/providers/google/cloud/utils/gcp_authenticator.py))
+Remember to modify `system_tests/cloudbuild.yaml` so `_SERVICE_ACCOUNTS_GCS_BUCKET` and `LOGS_GCS_BUCKET` substitutions will point to correct buckets.
 
 ## Run Breeze in Google Cloud Build
 
@@ -70,13 +60,15 @@ Setting `--timeout` for system tests is recommended.
 
 ### Substitutions
 
-| Substitution        | Default value                                                                                                                              | Description                                                                                                    |
-|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|
-| `_CMD`              | `./breeze tests --verbose --backend=postgres tests/providers/google/cloud/operators/test_natural_language_system.py -- -s --system=google` | Bash command run in `airflow-system-tests-env`.  See [Docker image to run Breeze](#docker-image-to-run-breeze) |
-| `_AIRFLOW_REPO`     | `https://github.com/apache/airflow`                                                                                                        | URL of the Airflow git repository.                                                                             |
-| `_BRANCH`           | `master`                                                                                                                                   | Name of the branch to checkout.                                                                                |
-| `_TAG_TRIGGER_TYPE` | `trigger-manual`                                                                                                                           | Tag added do GCB build                                                                                         |
-| `_TAG_TEST_NAME`    | `test-name-not-specified`                                                                                                                  | Tag added do GCB build                                                                                         |
+| Substitution                   | Default value                                                                                                                              | Description                                                                                                                                                                                                                                           |
+|--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `_CMD`                         | `./breeze tests --verbose --backend=postgres tests/providers/google/cloud/operators/test_natural_language_system.py -- -s --system=google` | Bash command run in `airflow-system-tests-env`.  See [Docker image to run Breeze](#docker-image-to-run-breeze)                                                                                                                                        |
+| `_AIRFLOW_REPO`                | `https://github.com/apache/airflow`                                                                                                        | URL of the Airflow git repository.                                                                                                                                                                                                                    |
+| `_BRANCH`                      | `master`                                                                                                                                   | Name of the branch to checkout.                                                                                                                                                                                                                       |
+| `_TAG_TRIGGER_TYPE`            | `trigger-manual`                                                                                                                           | Tag added do GCB build                                                                                                                                                                                                                                |
+| `_TAG_TEST_NAME`               | `test-name-not-specified`                                                                                                                  | Tag added do GCB build                                                                                                                                                                                                                                |
+| `_LOGS_GCS_BUCKET`             | `airflow-system-tests-logs`                                                                                                                | GCS bucket where tests logs are uploaded                                                                                                                                                                                                              |
+| `_SERVICE_ACCOUNTS_GCS_BUCKET` | `airflow-systest-project-system-tests-rlugtuhw`                                                                                           | GCS bucket where service accounts keys are stored (it is output from `airflow-providers-google-setup/terraform/modules/service_accounts_setup/outputs.tf`, see: [airflow-providers-google-setup/README.md](airflow-providers-google-setup/README.md)) |
 
 ## Run system tests on `apache/airflow` `master` branch
 

@@ -2,3 +2,6 @@
 *
 
 # Except files we want
+!init.sh
+!decrypt_all_variables.sh
+!set_variables.sh

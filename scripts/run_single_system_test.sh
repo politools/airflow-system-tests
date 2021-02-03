@@ -34,7 +34,7 @@ then
       exit 1
 fi
 
-CMD="./breeze tests --verbose --backend=postgres ${FILE_PATH} -- -s --system=google"
+CMD="./breeze tests --verbose --backend=postgres ${FILE_PATH} -- -s --system=google --include-long-running"
 FILE="${FILE_PATH##*/}"
 FILE_WITHOUT_PY="${FILE%.py}"
 
