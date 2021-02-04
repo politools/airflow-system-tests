@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -23,6 +22,9 @@ KEYRING=${KEYRING:-airflow}
 KEY=${KEY:-airflow_crypto_key}
 
 function _decrypt_variables () {
+  echo
+  echo "Decrypting variables"
+  echo
   printenv | cut -d "=" -f 1 | grep -e "ENCRYPTED$" | while read -r key; do
       val=${!key}
       decrypted_key=${key%_ENCRYPTED}
