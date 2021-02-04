@@ -23,6 +23,6 @@ module "service_account" {
   project_id  = var.project
   bucket_name = var.service_account_bucket_name
 
-  name          = "gcp-vision-account"
+  name          = "gcp-vision"
   project_roles = []
 }

@@ -16,40 +16,36 @@
 # specific language governing permissions and limitations
 # under the License.
 
-set -e
+# Auto-export all variables
+set -a
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+echo
+echo "Starting init.sh"
+echo
 
-GCB_DIR=$(cd "${DIR}/../system_tests/" && pwd);
-cd "${GCB_DIR}" || exit 1
+source set_variables.sh
 
-FILE_PATH=$1
-BUILD_ID=${2:-"manual"}
-TAG_TRIGGER_TYPE="trigger-${BUILD_ID}"
-
-if test -z "$FILE_PATH"
-then
-      echo "First argument is empty"
-      echo "Quiting"
-      exit 1
+if [[ -f "variables_decrypted.env" ]]; then
+   echo
+   echo "Reading decrypted variables"
+   echo
+   source "variables_decrypted.env"
 fi
 
-CMD="./breeze tests --verbose --backend=postgres ${FILE_PATH} -- -s --system=google --include-long-running"
-FILE="${FILE_PATH##*/}"
-FILE_WITHOUT_PY="${FILE%.py}"
 
 echo
-echo "Run single system test:"
-echo "  test:"
-echo "    ${FILE_PATH}"
-echo "  cmd:"
-echo "    ${CMD}"
-echo "  tags:"
-echo "    ${TAG_TRIGGER_TYPE}"
-echo "    ${FILE_WITHOUT_PY}"
+echo "Variables read"
+echo
+AIRFLOW__PROVIDERS_GOOGLE__VERBOSE_LOGGING="true"
+set -m
+set +a
+
+
+echo
+echo "Install gcloud"
 echo
 
-gcloud builds submit . \
-    --timeout=3600 \
-    --substitutions _CMD="${CMD}",_TAG_TRIGGER_TYPE="${TAG_TRIGGER_TYPE}",_TAG_TEST_NAME="${FILE_WITHOUT_PY}" \
-    --async
+rm /usr/bin/gcloud || true
+rm /opt/airflow/scripts/in_container/run_cli_tool.sh || true
+bash <(curl https://sdk.cloud.google.com/) --disable-prompts
+export PATH="/root/google-cloud-sdk/bin/:$PATH"

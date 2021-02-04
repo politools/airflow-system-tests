@@ -23,7 +23,7 @@ module "service_account" {
   project_id  = var.project
   bucket_name = var.service_account_bucket_name
 
-  name = "gcp-spanner-account"
+  name = "gcp-spanner"
   project_roles = [
     "${var.project}=>roles/spanner.admin",
   ]

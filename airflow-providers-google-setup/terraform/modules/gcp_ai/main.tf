@@ -23,7 +23,7 @@ module "service_account" {
   project_id  = var.project
   bucket_name = var.service_account_bucket_name
 
-  name = "gcp-ai-account"
+  name = "gcp-ai"
   project_roles = [
     "${var.project}=>roles/automl.admin",
     "${var.project}=>roles/dataflow.admin",

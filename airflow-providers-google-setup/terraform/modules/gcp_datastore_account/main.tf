@@ -23,7 +23,7 @@ module "service_account" {
   project_id  = var.project
   bucket_name = var.service_account_bucket_name
 
-  name = "gcp-datastore-account"
+  name = "gcp-datastore"
   project_roles = [
     "${var.project}=>roles/owner",
   ]
