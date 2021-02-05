@@ -25,6 +25,8 @@ module "project-service" {
 
   activate_apis = [
     "cloudkms.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "automl.googleapis.com"
   ]
 }
 
