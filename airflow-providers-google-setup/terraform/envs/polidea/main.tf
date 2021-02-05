@@ -32,6 +32,14 @@ resource "random_string" "bucket_suffix" {
   number  = false
 }
 
+resource "google_storage_bucket" "cloud_build_logs_bucket" {
+  name     = "${local.project_id}-system-tests-logs-${random_string.bucket_suffix.result}"
+  location = "EU"
+  project  = local.project_id
+
+  uniform_bucket_level_access = true
+}
+
 module "service_accounts_setup" {
   source      = "../../modules/service_accounts_setup"
   project     = local.project_id
