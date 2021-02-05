@@ -31,7 +31,6 @@ steps:
           git checkout ${_BRANCH}
   - id: 'Configure Airflow Breeze Config'
     name: 'gcr.io/cloud-builders/gcloud'
-#    dir: 'system_tests/airflow'
     entrypoint: 'bash'
     args:
       - '-c'
@@ -41,7 +40,9 @@ steps:
           mv set_variables.sh system_tests/airflow/files/airflow-breeze-config
           mv decrypt_all_variables.sh system_tests/airflow/files/airflow-breeze-config
 
-          chmod +x system_tests/airflow/files/airflow-breeze-config/decrypt_all_variables.sh
+          sed -i "s/YOUR_PROJECT_ID/$PROJECT_ID/g" \
+            system_tests/airflow/files/airflow-breeze-config/set_variables.sh
+
           bash system_tests/airflow/files/airflow-breeze-config/decrypt_all_variables.sh
 
           gsutil -m cp -r gs://${_SERVICE_ACCOUNTS_GCS_BUCKET}/service-accounts/ .

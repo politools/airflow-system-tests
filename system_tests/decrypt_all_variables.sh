@@ -39,4 +39,4 @@ function _decrypt_variables () {
 
 . "${MY_DIR}/set_variables.sh" >/dev/null
 
-_decrypt_variables > "${MY_DIR}/variables_decrypted.env"
+_decrypt_variables > "${MY_DIR}/variables_decrypted.env" || echo "decrypting variables failed"
