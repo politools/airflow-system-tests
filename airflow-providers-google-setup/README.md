@@ -57,10 +57,10 @@ It's suggested to create a new project to run systems tests, because some system
     export CONFIG_REGION="$(gcloud config get-value compute/region)"
     # create a new gcloud configuration for the project, not cessary if running in the cloud shell.
     gcloud config configurations create "$PROJECT_ID"
+    gcloud config set project "$PROJECT_ID"
     gcloud config set account "$CONFIG_ACCOUNT"
     gcloud config set compute/zone "$CONFIG_ZONE"
     gcloud config set compute/region "$CONFIG_REGION"
-    gcloud config set project "$PROJECT_ID"
     gcloud beta billing projects link "$PROJECT_ID" --billing-account=`gcloud beta billing accounts list --format='value(ACCOUNT_ID)' --limit 1`
     ```
 
@@ -68,9 +68,9 @@ It's suggested to create a new project to run systems tests, because some system
     be run in this environment, so you can change your working directory.
 
     ```bash
-    CURRENT_ENV_NAME="$(ls terraform/envs/ | head -n 1)"
-    ENV_NAME=<my-env-name>
-    cp "terraform/envs/${CURRENT_ENV}" "terraform/envs/${ENV_NAME}"
+    export CURRENT_ENV_NAME="$(ls terraform/envs/ | head -n 1)"
+    export ENV_NAME=<my-env-name>
+    cp -r "terraform/envs/${CURRENT_ENV_NAME}" "terraform/envs/${ENV_NAME}"
     cd "terraform/envs/${ENV_NAME}"
     ```
 
@@ -87,6 +87,7 @@ It's suggested to create a new project to run systems tests, because some system
 1. To create all resources in the environment, run:
 
     ```bash
+    terraform init
     terraform apply
     ```
     After the operation is completed, you will see a summary with the number of created resources and
@@ -103,7 +104,7 @@ It's suggested to create a new project to run systems tests, because some system
 1. Now you can verify the correct creation of the service account keys.
 
     ```baash
-    SERVICE_ACCOUNT_BUCKET=service_account_bucket_name
+    export SERVICE_ACCOUNT_BUCKET=service_account_bucket_name
     gsutil ls "gs://${SERVICE_ACCOUNT_BUCKET}/service-accounts/"
     ```
 
