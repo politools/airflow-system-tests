@@ -106,7 +106,7 @@ steps:
 
 substitutions:
   _AIRFLOW_REPO: 'https://github.com/apache/airflow'
-  _BRANCH: 'master'
+  _BRANCH: 'main'
   _SERVICE_ACCOUNTS_GCS_BUCKET: 'airflow-systest-project-system-tests-rlugtuhw'
   _LOGS_GCS_BUCKET: 'airflow-system-tests-logs'
   _CMD: |

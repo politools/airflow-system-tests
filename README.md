@@ -93,9 +93,9 @@ They are executed in **Google Cloud Build** by [Airflow Breeze](https://github.c
   Example of the command to run Google Memorystore system tests on the Airflow fork and non-default branch.
 
   ```shell
-  CMD="./breeze tests --verbose --backend=postgres tests/providers/google/cloud/operators/test_cloud_memorystore_system.py -- -s --system=google"
-  AIRFLOW_REPO="https://github.com/PolideaInternal/airflow"
-  BRANCH="fix-to-issue-8286-cloud-memorystore-memcached-operators"
+  export CMD="./breeze tests --verbose --backend=postgres tests/providers/google/cloud/operators/test_cloud_memorystore_system.py -- -s --system=google"
+  export AIRFLOW_REPO="https://github.com/PolideaInternal/airflow"
+  export BRANCH="fix-to-issue-8286-cloud-memorystore-memcached-operators"
 
   cd system_tests
   gcloud builds submit \
@@ -113,7 +113,7 @@ Configuration is located in `system_tests` folder. It supports following substit
 |--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `_CMD`                         | `./breeze tests --verbose --backend=postgres tests/providers/google/cloud/operators/test_natural_language_system.py -- -s --system=google` | Bash command run in `airflow-system-tests-env`.  See [Docker image to run Breeze](#docker-image-to-run-breeze)                                                                                                                                        |
 | `_AIRFLOW_REPO`                | `https://github.com/apache/airflow`                                                                                                        | URL of the Airflow git repository.                                                                                                                                                                                                                    |
-| `_BRANCH`                      | `master`                                                                                                                                   | Name of the branch to checkout.                                                                                                                                                                                                                       |
+| `_BRANCH`                      | `main`                                                                                                                                   | Name of the branch to checkout.                                                                                                                                                                                                                       |
 | `_TAG_TRIGGER_TYPE`            | `trigger-manual`                                                                                                                           | Tag added do GCB build                                                                                                                                                                                                                                |
 | `_TAG_TEST_NAME`               | `test-name-not-specified`                                                                                                                  | Tag added do GCB build                                                                                                                                                                                                                                |
 | `_LOGS_GCS_BUCKET`             | `airflow-system-tests-logs`                                                                                                                | GCS bucket where tests logs are uploaded                                                                                                                                                                                                              |
